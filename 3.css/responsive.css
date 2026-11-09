@@ -1,0 +1,208 @@
+/* ============================================================
+   TẬP TIN CSS: THIẾT KẾ ĐÁP ỨNG (RESPONSIVE MEDIA QUERIES)
+   Bao gồm breakpoint cho Màn hình lớn (>=1440px), Laptop (<=1024px),
+   Tablet (<=900px), Mobile (<=768px), Màn hình nhỏ (<=375px).
+   ============================================================ */
+
+/* 1. MÀN HÌNH LỚN */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1260px;
+  }
+}
+
+/* 2. LAPTOP & MÀN HÌNH VỪA */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 2.85rem;
+  }
+  .owner-container {
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* 3. TABLET & MÀN HÌNH XOAY NGANG */
+@media (max-width: 900px) {
+  .hero-container {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .hero-desc {
+    margin: 0 auto 2rem auto;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .booking-box {
+    grid-template-columns: 1fr;
+    padding: 2.2rem;
+    gap: 2rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Chủ quán: chuyển sidebar thành thanh điều hướng ngang */
+  .owner-container {
+    grid-template-columns: 1fr;
+  }
+
+  .owner-sidebar {
+    position: static;
+  }
+
+  .owner-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .owner-nav-btn {
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .owner-nav-btn.active {
+    border-left: none;
+    border-bottom: 3.5px solid var(--primary);
+  }
+
+  /* Chuyển bảng đặt bàn sang dạng thẻ trên thiết bị nhỏ */
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table, .data-table tbody, .data-table tr, .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    margin-bottom: 1rem;
+    background-color: var(--surface-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1rem;
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border-color);
+    text-align: right;
+  }
+
+  .data-table td:last-child {
+    border-bottom: none;
+    margin-top: 0.5rem;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: left;
+    padding-right: 1rem;
+  }
+}
+
+/* 4. MOBILE / ĐIỆN THOẠI PHỔ THÔNG */
+@media (max-width: 768px) {
+  .header-container {
+    height: auto;
+    min-height: 65px;
+    padding: 0.6rem 0;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 2.35rem;
+  }
+
+  .section-title, .panel-title {
+    font-size: 1.95rem;
+  }
+
+  .mobile-toggle-btn {
+    display: block;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    background-color: var(--surface-color);
+    flex-direction: column;
+    padding: 1.5rem 0;
+    gap: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    display: none;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+  }
+
+  .owner-content {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* 5. MÀN HÌNH SIÊU NHỎ */
+@media (max-width: 375px) {
+  .container {
+    width: 92%;
+  }
+
+  .hero-title {
+    font-size: 1.95rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .booking-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .role-switch-btn {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.78rem;
+  }
+}
+

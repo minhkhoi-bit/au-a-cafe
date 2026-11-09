@@ -1,0 +1,16 @@
+# Local secrets and Firebase CLI state
+.env
+.env.*
+!.env.example
+.firebase/
+serviceAccount*.json
+*-service-account*.json
+firebase-debug.log
+firestore-debug.log
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

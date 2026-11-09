@@ -1,0 +1,432 @@
+/* ============================================================
+   TẬP TIN CSS: GIAO DIỆN CHỦ QUÁN (OWNER DASHBOARD)
+   Bao gồm: Sidebar điều hướng quản trị, Thẻ thống kê (Overview),
+   Bảng danh sách đặt bàn (Data Table), Quản lý món (Menu Grid),
+   Form Cài đặt thông tin quán (Shop Settings).
+   ============================================================ */
+
+.owner-view {
+  min-height: 80vh;
+  padding: 2.5rem 0 4rem 0;
+}
+
+.owner-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* 1. SIDEBAR CHỦ QUÁN */
+.owner-sidebar {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.6rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 90px;
+}
+
+.owner-sidebar-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.owner-panel-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.owner-role-tag {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.owner-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.owner-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.owner-nav-btn:hover {
+  background-color: var(--surface-alt);
+}
+
+.owner-nav-btn.active {
+  background-color: var(--surface-alt);
+  color: var(--primary);
+  border-left: 3.5px solid var(--primary);
+}
+
+.owner-nav-icon {
+  font-size: 1.15rem;
+}
+
+.sidebar-pending-badge {
+  margin-left: auto;
+  background-color: var(--warning);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 50px;
+}
+
+.owner-sidebar-footer {
+  margin-top: 1.8rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.2rem;
+}
+
+/* 2. NỘI DUNG CHÍNH (OWNER CONTENT) */
+.owner-content {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2.2rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 550px;
+}
+
+.owner-tab-panel {
+  display: none;
+}
+
+.owner-tab-panel.active {
+  display: block;
+}
+
+.panel-header {
+  margin-bottom: 2rem;
+}
+
+.panel-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.panel-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* 3. THẺ THỐNG KÊ (STATS GRID) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background-color: var(--surface-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+  font-size: 2.2rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.stat-card-warning .stat-value {
+  color: var(--warning);
+}
+
+.dashboard-card {
+  background-color: var(--surface-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.6rem;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.quick-bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.quick-booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  gap: 1rem;
+}
+
+/* 4. BẢNG QUẢN LÝ ĐẶT BÀN */
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 260px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  background-color: var(--surface-alt);
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.data-table tbody tr:hover {
+  background-color: color-mix(in srgb, var(--surface-alt) 50%, transparent);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.table-empty-notice {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* 5. QUẢN LÝ MENU (CHỦ QUÁN) */
+.owner-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.5rem;
+}
+
+.owner-menu-item {
+  background-color: var(--surface-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+.owner-menu-item:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.owner-menu-header {
+  display: flex;
+  gap: 1rem;
+}
+
+.owner-menu-thumb {
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+.owner-menu-meta {
+  flex: 1;
+}
+
+.owner-menu-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.owner-menu-price {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+}
+
+.owner-menu-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.8rem;
+  margin-top: auto;
+}
+
+.btn-action-edit,
+.btn-action-delete {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.55rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.btn-action-edit:hover {
+  background: var(--surface-variant, rgba(0, 0, 0, 0.05));
+  border-color: var(--primary);
+}
+
+.btn-action-delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--error, #ef4444);
+}
+
+.btn-available {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-weight: 600;
+}
+
+.btn-available:hover {
+  background-color: rgba(34, 197, 94, 0.22);
+}
+
+.btn-unavailable {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-weight: 600;
+}
+
+.btn-unavailable:hover {
+  background-color: rgba(239, 68, 68, 0.22);
+}
+
+.availability-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 6. CÀI ĐẶT QUÁN (SETTINGS FORM) */
+.settings-form-container {
+  max-width: 620px;
+}
+
+.settings-form .form-group {
+  margin-bottom: 1.4rem;
+}
+

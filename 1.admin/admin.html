@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Bàn Quản Trị | Cafè</title>
+  
+  <!-- Các module CSS phân tầng dành cho Quản Trị -->
+<link rel="stylesheet" href="../3.css/theme.css">
+<link rel="stylesheet" href="../3.css/base.css">
+<link rel="stylesheet" href="../3.css/components.css">
+<link rel="stylesheet" href="../2.customer/customer.css">
+<link rel="stylesheet" href="owner.css">
+<link rel="stylesheet" href="../3.css/responsive.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ==================== HEADER BÀN QUẢN TRỊ ==================== -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="header-brand-group">
+        <a href="admin.html" class="logo">
+          <span class="logo-text" id="shopLogoText">Cafè</span>
+        </a>
+        <span id="ownerBadge" class="owner-badge">Chế độ chủ quán</span>
+      </div>
+
+      <!-- Cụm thao tác góc nhìn & Dark Mode -->
+      <div class="header-actions">
+        <div class="auth-btn-group" style="display: flex; gap: 0.6rem; align-items: center;">
+          <span class="auth-user-badge">
+            <span>👔</span>
+            <span id="adminStaffName">Nhân Viên</span>
+          </span>
+          <a href="../2.customer/customer.html" class="btn btn-secondary btn-sm" title="Về xem giao diện khách">
+            Trang Khách
+          </a>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-btn" aria-label="Đổi giao diện sáng tối">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         GIAO DIỆN CHỦ QUÁN (OWNER DASHBOARD)
+         ============================================================ -->
+    <div id="ownerView" class="owner-view">
+      <div class="container owner-container">
+        <!-- Sidebar điều hướng của Chủ quán -->
+        <aside class="owner-sidebar">
+          <div class="owner-sidebar-header">
+            <h3 class="owner-panel-title">Bàn Quản Trị</h3>
+            <p class="owner-role-tag">Chủ Quán / Quản Lý</p>
+          </div>
+          <nav class="owner-nav" role="tablist" aria-label="Chức năng chủ quán">
+            <button class="owner-nav-btn active" data-tab="overview" role="tab" aria-selected="true">
+              <span class="owner-nav-icon">📊</span> Tổng quan
+            </button>
+            <button class="owner-nav-btn" data-tab="bookings" role="tab" aria-selected="false">
+              <span class="owner-nav-icon">📅</span> Đặt bàn <span id="ownerPendingBadge" class="sidebar-pending-badge" style="display:none;">0</span>
+            </button>
+            <button class="owner-nav-btn" data-tab="menu" role="tab" aria-selected="false">
+              <span class="owner-nav-icon">☕</span> Quản lý menu
+            </button>
+            <button class="owner-nav-btn" data-tab="settings" role="tab" aria-selected="false">
+              <span class="owner-nav-icon">⚙️</span> Cài đặt quán
+            </button>
+          </nav>
+          <div class="owner-sidebar-footer">
+            <button id="ownerLogoutBtn" class="btn btn-secondary btn-block btn-logout">
+              🚪 Đăng xuất (Về khách)
+            </button>
+          </div>
+        </aside>
+
+        <!-- Khu vực nội dung các tab của Chủ quán -->
+        <div class="owner-content">
+          
+          <!-- TAB 1: TỔNG QUAN -->
+          <div id="tabOverview" class="owner-tab-panel active" role="tabpanel">
+            <div class="panel-header">
+              <h2 class="panel-title">Tổng Quan Hoạt Động</h2>
+              <p class="panel-desc">Số liệu thống kê hoạt động quán hôm nay</p>
+            </div>
+
+            <!-- 4 thẻ thống kê số liệu -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-icon">📅</span>
+                <div class="stat-info">
+                  <span class="stat-value" id="statTodayBookings">0</span>
+                  <span class="stat-label">Đặt bàn hôm nay</span>
+                </div>
+              </div>
+              <div class="stat-card stat-card-warning">
+                <span class="stat-icon">⏳</span>
+                <div class="stat-info">
+                  <span class="stat-value" id="statPendingBookings">0</span>
+                  <span class="stat-label">Đang chờ xác nhận</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <div class="stat-info">
+                  <span class="stat-value" id="statTodayGuests">0</span>
+                  <span class="stat-label">Tổng khách hôm nay</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">☕</span>
+                <div class="stat-info">
+                  <span class="stat-value" id="statActiveMenuItems">0</span>
+                  <span class="stat-label">Món đang mở bán</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Danh sách 5 lượt đặt gần nhất -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <h3 class="card-title">5 Lượt Đặt Bàn Gần Nhất</h3>
+                <button class="btn-link" id="viewAllBookingsBtn">Xem tất cả →</button>
+              </div>
+              <div id="recentBookingsQuickList" class="quick-bookings-list">
+                <!-- Render bằng JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: QUẢN LÝ ĐẶT BÀN -->
+          <div id="tabBookings" class="owner-tab-panel" role="tabpanel">
+            <div class="panel-header">
+              <h2 class="panel-title">Quản Lý Đặt Bàn</h2>
+              <p class="panel-desc">Xác nhận, thay đổi trạng thái hoặc hủy đơn đặt bàn</p>
+            </div>
+
+            <!-- Bộ lọc và tìm kiếm -->
+            <div class="table-toolbar">
+              <div class="search-box">
+                <input type="text" id="ownerSearchCustomer" placeholder="Tìm theo tên khách hoặc email...">
+              </div>
+              <div class="filter-controls">
+                <select id="ownerFilterDate">
+                  <option value="all">Tất cả ngày</option>
+                  <option value="today">Hôm nay</option>
+                  <option value="upcoming">Sắp tới</option>
+                </select>
+                <select id="ownerFilterStatus">
+                  <option value="all">Tất cả trạng thái</option>
+                  <option value="pending">Chờ xác nhận</option>
+                  <option value="confirmed">Đã xác nhận</option>
+                  <option value="cancelled">Đã hủy</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Bảng danh sách đặt bàn (Responsive: bảng trên desktop, thẻ trên mobile) -->
+            <div class="table-wrapper">
+              <table class="data-table" id="ownerBookingsTable">
+                <thead>
+                  <tr>
+                    <th>Khách hàng</th>
+                    <th>Email</th>
+                    <th>Ngày đến</th>
+                    <th>Giờ đến</th>
+                    <th>Khách</th>
+                    <th>Khu vực</th>
+                    <th>Ghi chú</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="ownerBookingsTbody">
+                  <!-- Render bằng JavaScript -->
+                </tbody>
+              </table>
+              <div id="ownerBookingsEmpty" class="table-empty-notice" style="display: none;">
+                Không tìm thấy lượt đặt bàn nào phù hợp.
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: QUẢN LÝ MENU -->
+          <div id="tabMenu" class="owner-tab-panel" role="tabpanel">
+            <div class="panel-header card-header-flex">
+              <div>
+                <h2 class="panel-title">Quản Lý Menu Món</h2>
+                <p class="panel-desc">Thêm món mới, điều chỉnh giá hoặc bật/tắt trạng thái mở bán</p>
+              </div>
+              <button id="openAddMenuModalBtn" class="btn btn-primary">
+                + Thêm Món Mới
+              </button>
+            </div>
+
+            <!-- Danh sách các món trong kho quản lý -->
+            <div class="owner-menu-grid" id="ownerMenuGrid">
+              <!-- Render bằng JavaScript -->
+            </div>
+          </div>
+
+          <!-- TAB 4: CÀI ĐẶT QUÁN -->
+          <div id="tabSettings" class="owner-tab-panel" role="tabpanel">
+            <div class="panel-header">
+              <h2 class="panel-title">Cài Đặt Thông Tin Quán</h2>
+              <p class="panel-desc">Thông tin lưu vào shopSettings và tự động cập nhật lên giao diện khách</p>
+            </div>
+
+            <div class="settings-form-container">
+              <form id="shopSettingsForm" class="settings-form" novalidate>
+                <div id="settingGeneralError" class="error-msg" style="margin-bottom: 1rem; font-size: 0.95rem;"></div>
+                <div class="form-group">
+                  <label for="settingShopName">Tên quán *</label>
+                  <input type="text" id="settingShopName" required>
+                  <span class="error-msg" id="settingNameError"></span>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="settingOpenTime">Giờ mở cửa * (HH:MM)</label>
+                    <input type="time" id="settingOpenTime" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="settingCloseTime">Giờ đóng cửa * (HH:MM)</label>
+                    <input type="time" id="settingCloseTime" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="settingMaxGuests">Số khách tối đa mỗi lượt đặt *</label>
+                  <input type="number" id="settingMaxGuests" min="1" max="100" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="settingPhone">Số điện thoại hotline *</label>
+                  <input type="tel" id="settingPhone" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="settingAddress">Địa chỉ quán *</label>
+                  <input type="text" id="settingAddress" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Lưu Cài Đặt</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>© 2026 <span class="dynamic-shop-name">Cafè</span>. Hệ Thống Quản Trị Quán Cà Phê.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL: THÊM / SỬA MÓN ĂN ==================== -->
+  <div id="menuItemModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="menuModalTitle">
+    <div class="modal-card modal-card-md">
+      <h3 class="modal-title" id="menuModalTitle">Thêm Món Mới</h3>
+      <form id="menuItemForm" class="menu-item-form" novalidate>
+        <input type="hidden" id="menuItemId">
+
+        <div class="form-group">
+          <label for="menuItemName">Tên món *</label>
+          <input type="text" id="menuItemName" placeholder="Ví dụ: Cà Phê Muối Hoàng Gia" required>
+          <span class="error-msg" id="menuNameError"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="menuItemPrice">Giá tiền (VNĐ) *</label>
+            <input type="number" id="menuItemPrice" min="1000" step="1000" placeholder="45000" required>
+            <span class="error-msg" id="menuPriceError"></span>
+          </div>
+          <div class="form-group">
+            <label for="menuItemCategory">Danh mục *</label>
+            <select id="menuItemCategory" required>
+              <option value="coffee">Cà Phê</option>
+              <option value="tea">Trà Trái Cây</option>
+              <option value="cake">Bánh Ngọt</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="menuItemImg">URL hình ảnh (Chỉ nhận link http/https)</label>
+          <input type="url" id="menuItemImg" placeholder="https://images.unsplash.com/...">
+          <span class="error-msg" id="menuImgError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="menuItemDesc">Mô tả ngắn về món</label>
+          <textarea id="menuItemDesc" rows="2" placeholder="Hương vị thơm béo đậm đà..."></textarea>
+        </div>
+
+        <div class="form-group form-checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="menuItemAvailable" checked>
+            <span>Đang mở bán (Bỏ tick nếu hết hàng)</span>
+          </label>
+        </div>
+
+        <div class="modal-actions-flex">
+          <button type="button" id="cancelMenuModalBtn" class="btn btn-secondary">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu Món</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Thông báo Toast nhanh cho các thao tác -->
+  <div id="toastNotification" class="toast-notification" role="status" aria-live="polite"></div>
+
+  <!-- ==================== KIẾN TRÚC MVC (MODEL - VIEW - CONTROLLER) ==================== -->
+  <!-- Firebase Cloud Database (Compat SDK for Vanilla JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- 1. Helpers & Core Storage & Firebase Config -->
+  <script src="../4.js/helpers.js"></script>
+  <script src="../4.js/storage.js"></script>
+  <script src="../4.js/firebase.config.js"></script>
+
+  <!-- 2. Models (Quản lý dữ liệu & nghiệp vụ dữ liệu) -->
+  <script src="../4.js/models/user.model.js"></script>
+  <script src="../4.js/models/menu.model.js"></script>
+  <script src="../4.js/models/booking.model.js"></script>
+  <script src="../4.js/models/settings.model.js"></script>
+
+  <!-- 3. Views (Quản lý giao diện, DOM & tương tác) -->
+  <script src="owner.view.js"></script>
+
+  <!-- 4. Controllers (Điều phối Model <-> View) -->
+  <script src="owner.controller.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

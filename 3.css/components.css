@@ -1,0 +1,490 @@
+/* ============================================================
+   TẬP TIN CSS: CÁC THÀNH PHẦN DÙNG CHUNG (COMPONENTS)
+   Bao gồm: Quy tắc nút bấm (Mục 8), Form controls, Modals, 
+   Dropdowns, Thanh cố định đáy màn hình (Bottom Bar) & Toast.
+   ============================================================ */
+
+/* ============================================================
+   1. QUY TẮC NÚT BẤM (BUTTON SYSTEM - MỤC 8)
+   - Hình chữ nhật bo góc 10px (--radius-button).
+   - Chiều cao tối thiểu 44px, khoảng cách giữa các nút tối thiểu 8px.
+   - Đủ các trạng thái: hover, focus-visible, active, disabled, loading.
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 44px;
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-button); /* Bo góc cố định 10px */
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-fast);
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* Nút chính (Primary) */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Nút phụ / Nút viền (Secondary / Outline - Trắng viền) */
+.btn-secondary,
+.btn-outline {
+  background-color: #FFFFFF;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled),
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--color-surface-sub);
+  border-color: #CBD5E1;
+}
+
+.btn-secondary:active:not(:disabled),
+.btn-outline:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Nút phong cách tối (Đăng ký) */
+.btn-dark {
+  background-color: #111827;
+  color: #FFFFFF;
+  border-color: #111827;
+}
+
+.btn-dark:hover:not(:disabled) {
+  background-color: #1F2937;
+  border-color: #1F2937;
+}
+
+.btn-dark:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Nút toàn chiều rộng */
+.btn-block {
+  width: 100%;
+}
+
+/* Trạng thái Disabled */
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+
+/* Trạng thái Loading (Kèm spinner SVG và khóa bấm lại) */
+.btn.is-loading {
+  pointer-events: none;
+  color: transparent !important;
+}
+
+.btn.is-loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid #FFFFFF;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: btnSpinner 0.6s linear infinite;
+}
+
+.btn-secondary.is-loading::after,
+.btn-outline.is-loading::after {
+  border-color: var(--color-text);
+  border-top-color: transparent;
+}
+
+@keyframes btnSpinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Nút icon (hình chữ nhật bo góc 10px, kích thước tối thiểu 44x44px) */
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-button);
+  background: transparent;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-surface-sub);
+  border-color: var(--color-border);
+}
+
+.btn-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Nhóm nút: khoảng cách tối thiểu 8px */
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* ============================================================
+   2. THANH CỐ ĐỊNH Ở ĐÁY MÀN HÌNH (BOTTOM FIXED BAR)
+   - Nền xanh đậm, dính chặt đáy màn hình.
+   - Bên trái: "Chọn chi nhánh" dạng dropdown.
+   - Bên phải: nút "Đặt bàn".
+   ============================================================ */
+.bottom-fixed-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  background-color: var(--color-bottom-bar);
+  color: var(--color-bottom-bar-text);
+  z-index: 95;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+}
+
+.bottom-fixed-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.bottom-branch-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: 0.95rem;
+}
+
+.bottom-branch-selector label {
+  font-weight: 500;
+  color: #E2E8F0;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .bottom-branch-selector label {
+    display: inline-block;
+  }
+}
+
+.branch-dropdown-select {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-button);
+  padding: 8px 14px;
+  font-size: 0.92rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  max-width: 260px;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.branch-dropdown-select:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.branch-dropdown-select option {
+  background-color: #FFFFFF;
+  color: var(--color-text);
+}
+
+.btn-bottom-reserve {
+  background-color: #FFFFFF;
+  color: var(--color-primary);
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-bottom-reserve:hover {
+  background-color: #F8FAFC;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   3. DROPDOWN TÀI KHOẢN (USER AVATAR DROPDOWN)
+   ============================================================ */
+.user-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-avatar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-height: 44px;
+  padding: 6px 14px;
+  background: var(--color-surface-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.user-avatar-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  box-shadow: var(--shadow-dropdown);
+  display: none;
+  flex-direction: column;
+  padding: var(--space-8) 0;
+  z-index: 200;
+}
+
+.user-dropdown-menu.show {
+  display: flex;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: 10px 16px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.user-dropdown-item:hover {
+  background-color: var(--color-surface-sub);
+  color: var(--color-primary);
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+/* ============================================================
+   4. Ô NHẬP LIỆU & FORM CHUẨN (MỤC 8 & 9)
+   - Bán kính 10px (--radius-input), chiều cao >= 44px.
+   - Nhãn trường luôn hiển thị.
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.form-group label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  outline: none;
+  transition: var(--transition-fast);
+  width: 100%;
+}
+
+.form-control:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 57, 50, 0.12);
+}
+
+.error-msg {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  min-height: 1.2rem;
+}
+
+/* ============================================================
+   5. HUY HIỆU (BADGES) VÀ TRẠNG THÁI
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 4px 10px;
+  border-radius: var(--radius-button);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.badge-danger {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* ============================================================
+   6. MODALS
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-card);
+  padding: var(--space-24);
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-dropdown);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-card-sm {
+  max-width: 400px;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.modal-desc {
+  color: var(--color-muted);
+  text-align: center;
+  font-size: 0.92rem;
+  margin-bottom: var(--space-24);
+}
+
+.modal-actions-flex {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-24);
+}
+
+.modal-actions-flex .btn {
+  flex: 1;
+}
+
+/* ============================================================
+   7. TOAST NOTIFICATION
+   ============================================================ */
+.toast-notification {
+  position: fixed;
+  bottom: 84px;
+  right: var(--space-24);
+  background-color: #111827;
+  color: #FFFFFF;
+  padding: 12px 20px;
+  border-radius: var(--radius-button);
+  font-size: 0.92rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: var(--transition);
+  z-index: 1100;
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}

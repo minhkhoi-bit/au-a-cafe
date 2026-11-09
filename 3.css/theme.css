@@ -1,0 +1,87 @@
+/* ============================================================
+   TẬP TIN CSS: DESIGN TOKENS TOÀN TRANG (THEME TOKENS)
+   Chuẩn hóa bảng màu, khoảng cách (spacing), bo góc (radius)
+   và typography theo yêu cầu thiết kế sạch, nhiều khoảng trắng.
+   ============================================================ */
+
+:root {
+  /* 1. BẢNG MÀU CHÍNH (COLOR PALETTE) */
+  --color-primary: #1E3932;           /* Xanh đậm thương hiệu cà phê thanh lịch */
+  --color-primary-dark: #122822;      /* Xanh đậm khi hover/active */
+  --color-primary-light: #EBF7F2;     /* Xanh nhạt cho điểm nhấn/badge */
+  --color-surface: #FFFFFF;           /* Nền trắng sạch */
+  --color-surface-sub: #F7F7F7;       /* Nền xám rất nhạt cho thanh phụ */
+  --color-surface-alt: #F3F4F6;       /* Nền xám nhạt phụ trợ */
+  --color-text: #212121;              /* Màu chữ đậm rõ ràng, tương phản > 4.5:1 */
+  --color-muted: #666666;             /* Màu chữ chú thích, nhạt hơn */
+  --color-border: #E5E7EB;            /* Viền xám mảnh tinh tế */
+  
+  /* Màu trạng thái hệ thống */
+  --color-success: #15803D;
+  --color-success-bg: #DCFCE7;
+  --color-warning: #B45309;
+  --color-warning-bg: #FEF3C7;
+  --color-danger: #DC2626;
+  --color-danger-bg: #FEE2E2;
+
+  /* Thanh đáy cố định */
+  --color-bottom-bar: #1E3932;        /* Nền xanh đậm cố định ở đáy */
+  --color-bottom-bar-text: #FFFFFF;   /* Chữ trắng trên nền đáy */
+
+  /* Ánh xạ tên biến cũ (để tương thích ngược) */
+  --bg-color: #FFFFFF;
+  --surface-color: var(--color-surface);
+  --surface-alt: var(--color-surface-sub);
+  --text-main: var(--color-text);
+  --text-muted: var(--color-muted);
+  --border-color: var(--color-border);
+  --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-dark);
+  --accent: var(--color-primary);
+  --on-primary: #FFFFFF;
+  --error: var(--color-danger);
+  --warning: var(--color-warning);
+  --warning-bg: var(--color-warning-bg);
+
+  /* 2. THANG KHOẢNG CÁCH (SPACING SYSTEM) */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+
+  /* 3. QUY TẮC BO GÓC (RADIUS TOKENS) - Mục 8: bo góc cố định 10px */
+  --radius-button: 10px;              /* Mọi nút là hình chữ nhật bo góc 10px */
+  --radius-card: 10px;                /* Thẻ đồng bộ 10px */
+  --radius-input: 10px;               /* Ô nhập liệu đồng bộ 10px */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* 4. ĐỔ BÓNG NHẸ (SHADOWS) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* 5. PHÔNG CHỮ & KÍCH THƯỚC (TYPOGRAPHY) */
+  --font-body: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+
+  /* 6. HIỆU ỨNG CHUYỂN ĐỘNG (TRANSITION: 150ms - 250ms) */
+  --transition: all 180ms ease;
+  --transition-fast: all 150ms ease;
+}
+
+/* Tôn trọng người dùng bật prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Âu - Việt Café | Menu & Đặt Bàn</title>
+
+  <!-- Các module CSS phân tầng theo chuẩn MVC -->
+  <link rel="stylesheet" href="../3.css/theme.css">
+  <link rel="stylesheet" href="../3.css/base.css">
+  <link rel="stylesheet" href="../3.css/components.css">
+  <link rel="stylesheet" href="customer.css">
+  <link rel="stylesheet" href="../3.css/responsive.css">
+
+  <!-- Thư viện bản đồ miễn phí Leaflet (OpenStreetMap) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Google Fonts: Be Vietnam Pro (sans-serif chuẩn hỗ trợ tiếng Việt đầy đủ) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ============================================================
+       1. HEADER CHÍNH (CAO 72PX, NỀN TRẮNG, VIỀN DƯỚI MẢNH)
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container">
+      <!-- Bên trái: Logo và liên kết Menu -->
+      <div class="header-left">
+        <a href="#menu" class="brand-logo" id="brandLogoLink">
+          <!-- Icon cốc cà phê SVG -->
+          <svg class="brand-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+            <line x1="6" y1="2" x2="6" y2="4"></line>
+            <line x1="10" y1="2" x2="10" y2="4"></line>
+            <line x1="14" y1="2" x2="14" y2="4"></line>
+          </svg>
+          <span id="shopLogoText">Âu - Việt Café</span>
+        </a>
+
+        <!-- Link "Menu": Chữ in hoa bằng CSS, đậm, giãn chữ nhẹ, gạch chân dày khi chọn -->
+        <a href="#menu" class="nav-link-menu active" id="navHeaderMenu">Menu</a>
+      </div>
+
+      <!-- Bên phải: Link Tìm chi nhánh, Nút Đăng nhập/Đăng ký hoặc Dropdown Avatar -->
+      <div class="header-right">
+        <!-- Link Tìm chi nhánh kèm icon ghim vị trí SVG -->
+        <a href="#branches" class="find-branch-link" id="navFindBranchLink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>Tìm chi nhánh</span>
+        </a>
+
+        <!-- Khối hiển thị khi CHƯA đăng nhập (Khách vãng lai) -->
+        <div id="authGuestGroup" class="btn-group">
+          <button id="navLoginBtn" class="btn btn-secondary" type="button">Đăng nhập</button>
+          <button id="navRegisterBtn" class="btn btn-dark" type="button">Đăng ký</button>
+        </div>
+
+        <!-- Khối hiển thị khi ĐÃ đăng nhập (Thành viên có dropdown) -->
+        <div id="authUserGroup" class="auth-user-dropdown" style="display: none;">
+          <button id="userAvatarBtn" class="auth-user-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+            <span class="user-avatar-circle" id="userAvatarLetter">U</span>
+            <span id="headerUserName">Khách hàng</span>
+            <svg class="dropdown-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <!-- Dropdown menu khi đã đăng nhập: Yêu thích, Đã đặt, Đăng xuất -->
+          <div id="userDropdownPanel" class="auth-dropdown-panel" role="menu">
+            <button class="dropdown-panel-item" type="button" id="userMenuFavorites">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+              <span>Món yêu thích</span>
+            </button>
+            <button class="dropdown-panel-item" type="button" id="userMenuBookings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                <line x1="16" x2="16" y1="2" y2="6"></line>
+                <line x1="8" x2="8" y1="2" y2="6"></line>
+                <line x1="3" x2="21" y1="10" y2="10"></line>
+              </svg>
+              <span>Lịch sử đặt bàn</span>
+            </button>
+            <div class="dropdown-panel-divider"></div>
+            <button class="dropdown-panel-item" type="button" id="navLogoutBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" x2="9" y1="12" y2="12"></line>
+              </svg>
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       2. THANH PHỤ NGAY DƯỚI HEADER Ở NHÓM TRANG MENU
+       Menu | Featured | Đã đặt | Yêu thích (Nền xám rất nhạt)
+       ============================================================ -->
+  <nav class="sub-header-bar" aria-label="Thanh điều hướng danh mục">
+    <div class="container sub-header-container">
+      <button type="button" class="sub-nav-btn active" data-target="viewMenu" id="tabNavMenu">Menu</button>
+      <button type="button" class="sub-nav-btn" data-target="viewFeatured" id="tabNavFeatured">Nổi bật</button>
+      <button type="button" class="sub-nav-btn" data-target="viewBookings" id="tabNavBookings">Đã đặt</button>
+      <button type="button" class="sub-nav-btn" data-target="viewFavorites" id="tabNavFavorites">Yêu thích</button>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       3. NỘI DUNG CHÍNH (CHỨA CÁC GIAO DIỆN THEO BƯỚC)
+       ============================================================ -->
+  <main class="customer-main-content">
+
+    <!-- VIEW 1: TRANG MENU (HAI CỘT: SIDEBAR 240PX & CONTENT PHẢI) -->
+    <section id="viewMenu" class="page-view-section active-view">
+      <div class="container menu-page-layout">
+        <!-- Sidebar trái: Nhóm cha & mục con dính khi cuộn -->
+        <aside class="menu-sidebar" id="menuSidebar">
+          <nav class="menu-sidebar-nav" id="sidebarCategoryNav">
+            <!-- Render động bằng JavaScript -->
+          </nav>
+        </aside>
+
+        <!-- Nội dung bên phải: Tiêu đề Menu, danh mục, lưới 2 cột thẻ ảnh tròn -->
+        <div class="menu-main-content" id="menuMainContent">
+          <div class="menu-page-header">
+            <h1 class="menu-main-title">Menu Quán</h1>
+            <p class="menu-main-subtitle">Hương vị cà phê và món ngon tuyển chọn từ Âu - Việt Café</p>
+          </div>
+          <div id="menuCategoriesContainer">
+            <!-- Render động bằng JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: TRANG FEATURED (TIÊU ĐỀ CĂN GIỮA & LƯỚI 2 CỘT THẺ LỚN) -->
+    <section id="viewFeatured" class="page-view-section">
+      <div class="container">
+        <div class="featured-header">
+          <h1 class="featured-title">Món Nổi Bật</h1>
+          <p class="featured-subtitle">Những sáng tạo đặc sắc và được yêu thích nhất tại Âu - Việt Café</p>
+        </div>
+        <div class="featured-grid" id="featuredGrid">
+          <!-- Render động từ dữ liệu IsFeatured & DisplayOrder -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: TRANG ĐÃ ĐẶT (LỊCH SỬ ĐẶT BÀN CỦA KHÁCH HÀNG / TRA CỨU) -->
+    <section id="viewBookings" class="page-view-section">
+      <div class="container">
+        <div class="section-top-bar">
+          <div>
+            <h1 class="page-heading">Lịch Sử Đặt Bàn</h1>
+            <p class="page-subheading">Các lượt đặt được lưu trên trình duyệt này</p>
+          </div>
+          <!-- Nút tra cứu nhanh cho khách vãng lai -->
+          <button type="button" class="btn btn-secondary" id="openLookupModalBtn">Tra cứu bằng Mã đặt bàn</button>
+        </div>
+        <div id="bookingsListContainer">
+          <!-- Render danh sách đặt bàn hoặc trạng thái trống -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: TRANG YÊU THÍCH (LƯỚI CÁC MÓN ĐÃ BẤM TIM) -->
+    <section id="viewFavorites" class="page-view-section">
+      <div class="container">
+        <div class="section-top-bar">
+          <div>
+            <h1 class="page-heading">Món Yêu Thích Của Bạn</h1>
+            <p class="page-subheading">Danh sách những hương vị bạn đã lưu lại</p>
+          </div>
+        </div>
+        <div class="favorites-grid" id="favoritesGrid">
+          <!-- Render động danh sách món yêu thích hoặc trạng thái trống -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: TRANG TÌM CHI NHÁNH & BẢN ĐỒ LEAFLET -->
+    <section id="viewBranches" class="page-view-section">
+      <div class="branches-page-wrapper">
+        <!-- Cột trái: Tìm kiếm, bộ lọc và danh sách chi nhánh (rộng ~420px) -->
+        <div class="branches-sidebar" id="branchesSidebar">
+          <div class="branches-search-box">
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="branchSearchInput" placeholder="Tìm theo tên đường, quận..." aria-label="Tìm chi nhánh">
+            </div>
+            <label class="branch-district-label" for="branchDistrict">Quận / huyện</label>
+            <select id="branchDistrict" aria-label="Lọc theo quận hoặc huyện"><option value="">Tất cả quận / huyện</option></select>
+            <!-- Nút Lọc theo quận, đang mở cửa, có đặt bàn -->
+            <div class="branch-filter-chips">
+              <button type="button" class="chip active" data-filter="all" aria-pressed="true">Tất cả</button>
+              <button type="button" class="chip" data-filter="open" aria-pressed="false">Đang mở cửa</button>
+              <button type="button" class="chip" data-filter="booking" aria-pressed="false">Có nhận đặt bàn</button>
+            </div>
+          </div>
+
+          <!-- Danh sách thẻ chi nhánh -->
+          <div class="branches-list" id="branchesList">
+            <!-- Render động bằng JavaScript -->
+          </div>
+        </div>
+
+        <!-- Cột phải: Bản đồ Leaflet với OpenStreetMap -->
+        <div class="branches-map-container" id="branchesMapContainer">
+          <div id="branchMap" aria-label="Bản đồ chi nhánh"></div>
+          <p id="branchMapError" class="branch-map-error" hidden>Không thể tải bản đồ. Vui lòng kiểm tra kết nối mạng.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: TRANG ĐẶT BÀN RIÊNG BIỆT (FORM CHI TIẾT THEO CÁC BƯỚC) -->
+    <section id="viewBookingForm" class="page-view-section">
+      <div class="container reservation-form-container">
+        <div class="reservation-form-box">
+          <div class="reservation-form-header">
+            <h1 class="page-heading">Đặt Bàn Trực Tuyến</h1>
+            <p class="page-subheading">Giữ chỗ trước tại Âu - Việt Café để có trải nghiệm trọn vẹn nhất</p>
+            <p class="page-subheading">Đặt trước tối đa 21 ngày; có thể hủy trước giờ hẹn ít nhất 5 tiếng.</p>
+            <p class="page-subheading">Bản dùng thử lưu thông tin trên trình duyệt này; mã đặt bàn chưa được xác nhận bởi quán.</p>
+          </div>
+
+          <form id="reservationForm" class="reservation-form" novalidate>
+            <!-- Bước 1: Chi nhánh -->
+            <div class="form-group">
+              <label for="resBranch">Chi nhánh *</label>
+              <select id="resBranch" name="branchId" required>
+                <!-- Render từ danh sách chi nhánh -->
+              </select>
+              <span class="error-msg" id="resBranchError"></span>
+            </div>
+
+            <!-- Bước 2: Ngày & Giờ (đặt trước tối đa 3 tuần = 21 ngày) -->
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="resDate">Ngày đến *</label>
+                <input type="date" id="resDate" name="date" required>
+                <span class="error-msg" id="resDateError"></span>
+              </div>
+              <div class="form-group">
+                <label id="resTimeLabel">Khung giờ *</label>
+                <div class="time-slots-grid" id="resTimeSlotsGrid" role="group" aria-labelledby="resTimeLabel">
+                  <!-- Lưới nút khung giờ render động theo giờ mở cửa -->
+                </div>
+                <input type="hidden" id="resTimeSelected" name="time" required>
+                <span class="error-msg" id="resTimeError"></span>
+              </div>
+            </div>
+
+            <!-- Bước 3: Số khách (nút trừ/cộng từ 1 đến 8 người) -->
+            <div class="form-group">
+              <label>Số lượng khách * (Tối đa 8 người)</label>
+              <div class="guest-counter-control">
+                <button type="button" class="counter-btn" id="guestMinusBtn" aria-label="Giảm 1 khách">−</button>
+                <span class="counter-value" id="guestCountDisplay">2</span>
+                <input type="hidden" id="resPartySize" name="partySize" value="2">
+                <button type="button" class="counter-btn" id="guestPlusBtn" aria-label="Tăng 1 khách">+</button>
+                <span class="counter-label">khách</span>
+              </div>
+              <span class="error-msg" id="resPartySizeError"></span>
+            </div>
+
+            <!-- Bước 4: Đặt món trước (Theo yêu cầu: add thêm phần đặt món trước vào đặt bàn) -->
+            <div class="form-group">
+              <label>Đặt món trước (Tùy chọn)</label>
+              <div class="preorder-container">
+                <button type="button" class="btn btn-secondary btn-sm" id="openPreorderModalBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Chọn món dùng kèm khi đến quán</span>
+                </button>
+                <div id="preorderSummary" class="preorder-summary-list"></div>
+              </div>
+            </div>
+
+            <!-- Bước 5: Thông tin liên hệ -->
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="resName">Họ và tên *</label>
+                <input type="text" id="resName" name="guestName" placeholder="Nguyễn Văn A" required>
+                <span class="error-msg" id="resNameError"></span>
+              </div>
+              <div class="form-group">
+                <label for="resPhone">Số điện thoại *</label>
+                <input type="tel" id="resPhone" name="phone" placeholder="0901234567" required>
+                <span class="error-msg" id="resPhoneError"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resEmail">Email (Không bắt buộc)</label>
+              <input type="email" id="resEmail" name="email" placeholder="email@vi-du.com">
+              <span class="error-msg" id="resEmailError"></span>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="form-group">
+              <label for="resNote">Ghi chú thêm</label>
+              <textarea id="resNote" name="note" rows="3" placeholder="Sinh nhật, ghế trẻ em, khu vực ngồi mong muốn..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="submitReservationBtn">Hoàn Tất Đặt Bàn</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       4. THANH CỐ ĐỊNH Ở ĐÁY MÀN HÌNH (BOTTOM FIXED BAR)
+       Nền xanh đậm, Dropdown chọn chi nhánh bên trái, Nút đặt bàn bên phải
+       ============================================================ -->
+  <aside class="bottom-fixed-bar" aria-label="Thanh thao tác nhanh đặt bàn">
+    <div class="container bottom-fixed-container">
+      <div class="bottom-branch-group">
+        <svg class="bottom-branch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <label for="bottomBranchSelect" class="visually-hidden" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">Chọn chi nhánh quán</label>
+        <select id="bottomBranchSelect" class="bottom-branch-select" aria-label="Chọn chi nhánh">
+          <!-- Render danh sách chi nhánh -->
+        </select>
+      </div>
+
+      <button type="button" class="bottom-reserve-btn" id="bottomReserveBtn">
+        <span>Đặt bàn</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       5. MODAL ĐĂNG NHẬP (POPUP)
+       ============================================================ -->
+  <div id="loginModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div class="modal-card modal-card-sm">
+      <h2 class="modal-title" id="loginModalTitle">Đăng nhập tài khoản</h2>
+      <p class="modal-desc">Đăng nhập để xem lịch sử đặt bàn và món yêu thích</p>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="loginUsername">Email *</label>
+          <input type="email" id="loginUsername" placeholder="Nhập email" autocomplete="username" required>
+          <span class="error-msg" id="loginUsernameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Mật khẩu *</label>
+          <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" autocomplete="current-password" required>
+          <span class="error-msg" id="loginPasswordError"></span>
+        </div>
+
+        <div class="modal-actions-flex">
+          <button type="button" id="cancelLoginBtn" class="btn btn-secondary">Đóng</button>
+          <button type="submit" class="btn btn-primary" id="submitLoginBtn">Đăng nhập</button>
+        </div>
+
+        <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: var(--color-muted);">
+          Chưa có tài khoản? <a href="#" id="switchToRegisterBtn" style="color: var(--color-primary); font-weight: 600;">Đăng ký ngay</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       6. MODAL ĐĂNG KÝ (POPUP)
+       ============================================================ -->
+  <div id="registerModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="registerModalTitle">
+    <div class="modal-card modal-card-sm">
+      <h2 class="modal-title" id="registerModalTitle">Tạo tài khoản mới</h2>
+      <p class="modal-desc">Trở thành thành viên của Âu - Việt Café</p>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="regFullName">Họ và tên *</label>
+          <input type="text" id="regFullName" placeholder="Nguyễn Văn A" required>
+          <span class="error-msg" id="regFullNameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email *</label>
+          <input type="email" id="regEmail" placeholder="example@email.com" required>
+          <span class="error-msg" id="regEmailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Mật khẩu *</label>
+          <input type="password" id="regPassword" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" required>
+          <span class="error-msg" id="regPasswordError"></span>
+        </div>
+
+        <div class="modal-actions-flex">
+          <button type="button" id="cancelRegisterBtn" class="btn btn-secondary">Đóng</button>
+          <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </div>
+
+        <p style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: var(--color-muted);">
+          Đã có tài khoản? <a href="#" id="switchToLoginBtn" style="color: var(--color-primary); font-weight: 600;">Đăng nhập</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       7. MODAL CHI TIẾT MÓN ĂN & CHỌN MÓN ĐẶT TRƯỚC
+       ============================================================ -->
+  <div id="itemDetailModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="detailItemName">
+    <div class="modal-card" style="max-width: 520px;">
+      <div id="itemDetailContent">
+        <!-- Render động thông tin chi tiết món, topping và nút thêm -->
+      </div>
+      <div class="modal-actions-flex">
+        <button type="button" class="btn btn-secondary" id="closeDetailModalBtn">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       8. MODAL TRA CỨU ĐẶT BÀN CHO KHÁCH VÃNG LAI
+       ============================================================ -->
+  <div id="lookupModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-sm">
+      <h2 class="modal-title">Tra cứu đơn đặt bàn</h2>
+      <p class="modal-desc">Nhập mã đặt bàn và số điện thoại để tra cứu dữ liệu lưu trên trình duyệt này.</p>
+
+      <form id="lookupForm" novalidate>
+        <div class="form-group">
+          <label for="lookupCode">Mã đặt bàn *</label>
+          <input type="text" id="lookupCode" placeholder="Ví dụ: AV-123456" required>
+          <span class="error-msg" id="lookupCodeError"></span>
+        </div>
+        <div class="form-group">
+          <label for="lookupPhone">Số điện thoại *</label>
+          <input type="tel" id="lookupPhone" placeholder="Số điện thoại đã đặt bàn" required>
+          <span class="error-msg" id="lookupPhoneError"></span>
+        </div>
+        <div class="modal-actions-flex">
+          <button type="button" id="closeLookupBtn" class="btn btn-secondary">Đóng</button>
+          <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
+      </form>
+
+      <div id="lookupResultBox" style="margin-top: 16px;"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       9. MODAL THÔNG BÁO XÁC NHẬN ĐẶT BÀN THÀNH CÔNG
+       ============================================================ -->
+  <div id="successModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2 class="modal-title" style="color: var(--color-success);">Đặt bàn thành công!</h2>
+      <div id="successModalDetails" style="margin: 16px 0; font-size: 0.95rem; line-height: 1.6;">
+        <!-- Tóm tắt mã đặt bàn, chi nhánh, ngày giờ, số người, trạng thái Chờ xác nhận -->
+      </div>
+      <button id="closeSuccessModalBtn" class="btn btn-primary btn-block">Đã hiểu</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification thông báo nhanh góc màn hình -->
+  <div id="toastNotification" class="toast-notification" role="status" aria-live="polite"></div>
+
+  <!-- ============================================================
+       SCRIPTS: KIẾN TRÚC MVC CHUẨN TRÊN VANILLA JAVASCRIPT
+       ============================================================ -->
+  <!-- Thư viện bản đồ Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- 1. Tầng Utilities & Data Core -->
+  <script src="../4.js/helpers.js"></script>
+  <script src="../4.js/storage.js"></script>
+  <script src="../4.js/firebase.config.js"></script>
+
+  <!-- 2. Tầng Models (Xử lý dữ liệu thuần, không đụng DOM) -->
+  <script src="../4.js/models/branch.model.js"></script>
+  <script src="../4.js/models/user.model.js"></script>
+  <script src="../4.js/models/favorite.model.js"></script>
+  <script src="../4.js/models/menu.model.js"></script>
+  <script src="../4.js/models/booking.model.js"></script>
+  <script src="../4.js/models/settings.model.js"></script>
+
+  <!-- 3. Tầng View (Quản lý DOM & tương tác người dùng) -->
+  <script src="customer.view.js"></script>
+
+  <!-- 4. Tầng Controller (Điều phối giữa Model và View) -->
+  <script src="customer.controller.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Quyền quản trị được xác định bằng tài liệu admins của người đang đăng nhập.
+    function isAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Kiểm tra kiểu và độ dài tối đa của chuỗi.
+    function boundedString(value, limit) {
+      return value is string && value.size() <= limit;
+    }
+
+    // Đơn mới chỉ chứa đúng các trường của BookingModel và các giá trị hợp lệ.
+    function validBooking(data) {
+      return data.keys().hasAll(['id', 'code', 'userId', 'fullName', 'email', 'phone', 'branchId', 'branchName', 'preOrders', 'bookDate', 'bookTime', 'guests', 'area', 'notes', 'status', 'createdAt'])
+        && data.keys().hasOnly(['id', 'code', 'userId', 'fullName', 'email', 'phone', 'branchId', 'branchName', 'preOrders', 'bookDate', 'bookTime', 'guests', 'area', 'notes', 'status', 'createdAt'])
+        && data.id is int
+        && boundedString(data.code, 32)
+        && (data.userId == null || boundedString(data.userId, 128))
+        && boundedString(data.fullName, 100)
+        && boundedString(data.email, 254)
+        && boundedString(data.phone, 30)
+        && boundedString(data.branchId, 128)
+        && boundedString(data.branchName, 200)
+        && data.preOrders is list && data.preOrders.size() <= 100
+        && boundedString(data.bookDate, 10)
+        && boundedString(data.bookTime, 5)
+        && data.guests is number && data.guests >= 1 && data.guests <= 20
+        && boundedString(data.area, 200)
+        && boundedString(data.notes, 1000)
+        && data.status == 'pending'
+        && boundedString(data.createdAt, 100);
+    }
+
+    match /menu/{id} {
+      // Mọi người được đọc menu.
+      allow read: if true;
+      // Chỉ quản trị viên được ghi menu.
+      allow write: if isAdmin();
+    }
+    match /settings/{id} {
+      // Mọi người được đọc cấu hình.
+      allow read: if true;
+      // Chỉ quản trị viên được ghi cấu hình.
+      allow write: if isAdmin();
+    }
+    match /bookings/{id} {
+      // Mọi người được tạo đơn có cấu trúc và nội dung hợp lệ.
+      allow create: if validBooking(request.resource.data);
+      // Mọi người được đọc một đơn theo ID.
+      allow get: if true;
+      // Chỉ quản trị viên được liệt kê đơn.
+      allow list: if isAdmin();
+      // Quản trị viên được sửa; người khác chỉ được đổi trạng thái sang cancelled.
+      allow update: if isAdmin() || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasAll(['status'])
+        && request.resource.data.status == 'cancelled');
+      // Chỉ quản trị viên được xóa đơn.
+      allow delete: if isAdmin();
+    }
+    match /users/{uid} {
+      // Người dùng đã đăng nhập chỉ được đọc và ghi hồ sơ của chính mình.
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /admins/{uid} {
+      // Người dùng chỉ được đọc tài liệu quyền của chính mình.
+      allow get: if request.auth != null && request.auth.uid == uid;
+      // Client không được liệt kê hoặc ghi tài liệu quyền quản trị.
+      allow list, write: if false;
+    }
+  }
+}
