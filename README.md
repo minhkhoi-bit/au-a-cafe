@@ -44,7 +44,7 @@ DuAnWeb-LapTrinhWeb/
 
 ## 2. Chi tiết 3 tầng MVC trong dự án
 
-### 🟢 1. Lớp Model (`4.js/models/`)
+###  1. Lớp Model (`4.js/models/`)
 - **Nhiệm vụ:** Quản lý cấu trúc dữ liệu, các thao tác CRUD và logic tính toán dữ liệu thuần túy.
 - **Tính độc lập:** Các file Model **hoàn toàn không đụng đến DOM** (`document`, `innerHTML` hay `querySelector`).
   - [`user.model.js`](4.js/models/user.model.js): Đăng ký, đăng nhập và xác định quyền qua Firebase.
@@ -52,13 +52,13 @@ DuAnWeb-LapTrinhWeb/
   - [`booking.model.js`](4.js/models/booking.model.js): Quản lý, lọc và thống kê đặt bàn.
   - [`settings.model.js`](4.js/models/settings.model.js): Quản lý cấu hình quán và khung giờ đặt bàn.
 
-### 🔵 2. Lớp View (`customer.view.js` & `owner.view.js`)
+###  2. Lớp View (`customer.view.js` & `owner.view.js`)
 - **Nhiệm vụ:** Nhận dữ liệu từ Controller và tạo ra mã HTML giao diện; đăng ký lắng nghe sự kiện từ người dùng (click, submit, change) và chuyển giao cho Controller xử lý qua các callback.
 - **Tính độc lập:** View **không được gọi trực tiếp `localStorage` hay sửa đổi dữ liệu gốc**.
   - [`customer.view.js`](2.customer/customer.view.js): Hiển thị giao diện khách hàng.
   - [`owner.view.js`](1.admin/owner.view.js): Hiển thị giao diện quản trị.
 
-### 🟣 3. Lớp Controller (`customer.controller.js` & `owner.controller.js`)
+###  3. Lớp Controller (`customer.controller.js` & `owner.controller.js`)
 - **Nhiệm vụ:** Đóng vai trò là "nhạc trưởng" trung gian:
   1. Lắng nghe hành động của người dùng từ View.
   2. Kiểm tra tính hợp lệ dữ liệu (Validation).
